@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify
 import joblib
 import numpy as np
 
-app = Flask(__Rejuvespark__)
+app = Flask(__name__)
 
 model = joblib.load("sulfation_model.joblib")   # FIXED
 scaler = joblib.load("input_scaler.joblib")     # FIXED
