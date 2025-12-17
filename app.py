@@ -23,9 +23,13 @@ def predict():
     efficiency = 100 - sulfation
 
     return jsonify({
-        "efficiency": round(efficiency, 2),
-        "sulfation": round(sulfation, 2)
+         "voltage": voltage,
+         "current": current,
+         "efficiency": float(efficiency),
+         "sulfation": float(sulfation),
+         "device_status": "CONNECTED"
     })
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8000)
