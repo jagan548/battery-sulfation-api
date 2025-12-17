@@ -27,10 +27,6 @@ def predict():
     sulfation = 100 - efficiency
 
     return jsonify({
-        "voltage": voltage,
-        "current": current,
-        "percentage": percentage,
         "efficiency": round(efficiency, 2),
         "sulfation": round(sulfation, 2),
-        "device_status": "CONNECTED"
     })
