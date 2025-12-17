@@ -17,19 +17,20 @@ def predict():
     current = float(data['current'])
     percentage = float(data['percentage'])
 
+    # Scale inputs
     scaled = scaler.transform([[voltage, current, percentage]])
-    sulfation = model.predict(scaled)[0]
 
-    efficiency = 100 - sulfation
+    # Model output (Efficiency)
+    efficiency = float(model.predict(scaled)[0])
+
+    # Sulfation = 100 - efficiency
+    sulfation = 100 - efficiency
 
     return jsonify({
-         "voltage": voltage,
-         "current": current,
-         "efficiency": float(efficiency),
-         "sulfation": float(sulfation),
-         "device_status": "CONNECTED"
+        "voltage": voltage,
+        "current": current,
+        "percentage": percentage,
+        "efficiency": round(efficiency, 2),
+        "sulfation": round(sulfation, 2),
+        "device_status": "CONNECTED"
     })
-
-
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=8000)
