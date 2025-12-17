@@ -1,8 +1,10 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 import joblib
 import numpy as np
 
 app = Flask(__name__)
+CORS(app)  # ✅ VERY IMPORTANT
 
 model = joblib.load("sulfation_model.joblib")
 scaler = joblib.load("input_scaler.joblib")
@@ -11,19 +13,19 @@ scaler = joblib.load("input_scaler.joblib")
 def predict():
     data = request.json
 
-    voltage = data['voltage']
-    current = data['current']
-    percentage = data['percentage']
+    voltage = float(data['voltage'])
+    current = float(data['current'])
+    percentage = float(data['percentage'])
 
     scaled = scaler.transform([[voltage, current, percentage]])
-    pred = model.predict(scaled)[0]
+    sulfation = model.predict(scaled)[0]
 
-    efficiency = float(pred)
-    sulfation = 100 - efficiency
+    efficiency = 100 - sulfation
 
     return jsonify({
         "efficiency": round(efficiency, 2),
         "sulfation": round(sulfation, 2)
     })
 
-app.run(host='0.0.0.0', port=8000)
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=8000)
